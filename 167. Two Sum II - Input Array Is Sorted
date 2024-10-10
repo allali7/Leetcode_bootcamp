@@ -1,0 +1,22 @@
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        left = 0
+        right = len(numbers) - 1
+        
+        while left < right:
+            current_sum = numbers[left] + numbers[right]
+            
+            # If the target sum is found, return the 1-based indices
+            if current_sum == target:
+                return [left + 1, right + 1]
+            
+            # Move the right pointer left if the sum is too large
+            elif current_sum > target:
+                right -= 1
+            
+            # Move the left pointer right if the sum is too small
+            else:
+                left += 1
+                
+        return []
+        
