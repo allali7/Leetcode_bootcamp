@@ -1,0 +1,32 @@
+from collections import Counter
+
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        # Edge case: If p is longer than s, no anagrams are possible
+        if len(p) > len(s):
+            return []
+
+        # Initialize frequency counters
+        p_count = Counter(p)
+        s_count = Counter(s[:len(p)])  # Initial window of size len(p)
+        
+        result = []
+        # Check if the first window is an anagram
+        if s_count == p_count:
+            result.append(0)
+
+        # Slide the window over s
+        for i in range(len(p), len(s)):
+            # Add the new character to the current window
+            s_count[s[i]] += 1
+            # Remove the character that is no longer in the window
+            s_count[s[i - len(p)]] -= 1
+            # If a character count goes to zero, remove it from the counter
+            if s_count[s[i - len(p)]] == 0:
+                del s_count[s[i - len(p)]]
+            
+            # Check if the current window matches p's frequency count
+            if s_count == p_count:
+                result.append(i - len(p) + 1)
+        
+        return result
