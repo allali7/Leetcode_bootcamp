@@ -1,0 +1,29 @@
+from collections import deque, defaultdict
+
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        # Step 1: Build graph and in-degree array
+        graph = defaultdict(list)
+        in_degree = [0] * numCourses
+        
+        for course, prereq in prerequisites:
+            graph[prereq].append(course)
+            in_degree[course] += 1
+        
+        # Step 2: Initialize queue with courses having in-degree 0
+        queue = deque([i for i in range(numCourses) if in_degree[i] == 0])
+        result = []
+        
+        # Step 3: Process nodes using BFS
+        while queue:
+            course = queue.popleft()
+            result.append(course)
+            
+            # Reduce in-degree of neighbors
+            for neighbor in graph[course]:
+                in_degree[neighbor] -= 1
+                if in_degree[neighbor] == 0:
+                    queue.append(neighbor)
+        
+        # Step 4: Check if all courses are in the result
+        return result if len(result) == numCourses else []
